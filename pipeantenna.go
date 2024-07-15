@@ -38,5 +38,5 @@ func main() {
 		w.Write(d)
 	})
 
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServeTLS(":8080", os.Args[len(os.Args)-2], os.Args[len(os.Args)-1], nil)
 }
