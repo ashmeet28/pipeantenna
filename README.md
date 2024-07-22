@@ -3,5 +3,5 @@
 ## Usage
 
 ```
-pipeantenna cert key
+pipeantenna certFile keyFile
 ```
