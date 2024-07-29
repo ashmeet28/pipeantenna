@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>File Upload</title>
+    <title>Pipe Antenna</title>
     <script>
         function uploadFile(fileInput) {
             alert("Starting file upload")
@@ -13,11 +13,17 @@
             xhr.setRequestHeader('Content-Type', "application/octet-stream");
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    alert(xhr.responseText);
+                    alert("Done");
+                } else {
+                    alert("Error")
                 }
             };
 
             xhr.send(fileInput.files[0]);
+        }
+
+        function downloadFileWithAuthKey(authKeyInput) {
+            window.open("/download?auth_key=" + authKeyInput.value, "_blank")
         }
     </script>
     <style>
@@ -25,18 +31,30 @@
         input {
             font-size: 2.25rem;
             line-height: 2.5rem;
+            padding: 1rem;
+        }
+
+        div {
+            padding: 1rem;
         }
     </style>
 </head>
 
 <body>
-    <h1>File Upload</h1>
-    <input type="file" id="fileInput" />
-    <button onclick="uploadFile(document.getElementById('fileInput'))">Upload File</button>
-    <h1>File Download</h1>
-    <form action="/download" method="get">
-        <button type="submit">Download File</button>
-    </form>
+    <div>
+        <input type="file" id="fileInput" />
+
+        <button onclick="uploadFile(document.getElementById('fileInput'))">
+            Upload File
+        </button>
+    </div>
+    <div>
+        <input type="text" placeholder="Auth Key" id="authKeyInput" />
+
+        <button onclick="downloadFileWithAuthKey(document.getElementById('authKeyInput'))">
+            Download File
+        </button>
+    </div>
 </body>
 
 </html>
