@@ -11,11 +11,11 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 4 {
+	if len(os.Args) != 5 {
 		return
 	}
 
-	indexFileData, err1 := os.ReadFile("web_pages/index.html")
+	indexFileData, err1 := os.ReadFile(os.Args[1])
 	if err1 != nil {
 		return
 	}
@@ -29,7 +29,7 @@ func main() {
 
 	authKey := hex.EncodeToString(authKeyBuf)
 
-	err3 := os.WriteFile(os.Args[3], append([]byte(authKey), 0x0a), 0600)
+	err3 := os.WriteFile(os.Args[4], append([]byte(authKey), 0x0a), 0600)
 	if err3 != nil {
 		return
 	}
@@ -84,5 +84,5 @@ func main() {
 		}
 	})
 
-	http.ListenAndServeTLS(":8080", os.Args[1], os.Args[2], nil)
+	http.ListenAndServeTLS(":8080", os.Args[2], os.Args[3], nil)
 }
