@@ -13,4 +13,3 @@ openssl req -x509 -newkey rsa:4096 -noenc -keyout /mnt/t/pipeantenna_https_key -
 ```
 openssl pkey -in /mnt/t/pipeantenna_https_key -pubout -outform DER | sha256sum
 ```
-
