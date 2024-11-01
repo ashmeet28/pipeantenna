@@ -7,5 +7,5 @@ pipeantenna web_pages/index.html /mnt/t/pipeantenna_https_crt /mnt/t/pipeantenna
 ```
 
 ```
-openssl req -newkey rsa:4096 -nodes -keyout /mnt/t/pipeantenna_https_key -x509 -days 365 -out /mnt/t/pipeantenna_https_crt
+openssl req -x509 -newkey rsa:4096 -noenc -keyout /mnt/t/pipeantenna_https_key -out /mnt/t/pipeantenna_https_crt
 ```
