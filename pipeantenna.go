@@ -12,26 +12,26 @@ import (
 
 func main() {
 	if len(os.Args) != 5 {
-		return
+		os.Exit(1)
 	}
 
-	indexFileData, err1 := os.ReadFile(os.Args[1])
-	if err1 != nil {
-		return
+	indexFilePath := os.Args[1]
+	indexFileData, err := os.ReadFile(indexFilePath)
+	if err != nil {
+		os.Exit(1)
 	}
 
 	authKeyBuf := make([]byte, 4)
 
-	_, err2 := rand.Read(authKeyBuf)
-	if err2 != nil {
-		return
+	if _, err := rand.Read(authKeyBuf); err != nil {
+		os.Exit(1)
 	}
 
 	authKey := hex.EncodeToString(authKeyBuf)
 
-	err3 := os.WriteFile(os.Args[4], append([]byte(authKey), 0x0a), 0600)
-	if err3 != nil {
-		return
+	authKeyFilePath := os.Args[4]
+	if err := os.WriteFile(authKeyFilePath, append([]byte(authKey), 0x0a), 0600); err != nil {
+		os.Exit(1)
 	}
 
 	var l sync.Mutex
@@ -60,12 +60,14 @@ func main() {
 		l.Lock()
 
 		if r.URL.Path == "/upload" {
+
 			_, err := io.Copy(os.Stdout, r.Body)
 			if err == nil {
 				w.WriteHeader(http.StatusOK)
 			} else {
 				w.WriteHeader(http.StatusInternalServerError)
 			}
+
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -84,5 +86,8 @@ func main() {
 		}
 	})
 
-	http.ListenAndServeTLS(":8080", os.Args[2], os.Args[3], nil)
+	certFilePath := os.Args[2]
+	keyFilePath := os.Args[3]
+
+	http.ListenAndServeTLS(":8080", certFilePath, keyFilePath, nil)
 }
