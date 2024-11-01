@@ -9,3 +9,8 @@ pipeantenna ~/go/src/github.com/ashmeet28/pipeantenna/web_pages/index.html /mnt/
 ```
 openssl req -x509 -newkey rsa:4096 -noenc -keyout /mnt/t/pipeantenna_https_key -out /mnt/t/pipeantenna_https_crt
 ```
+
+```
+openssl pkey -in /mnt/t/pipeantenna_https_key -pubout -outform DER | sha256sum
+```
+
