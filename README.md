@@ -3,7 +3,7 @@
 ## Usage
 
 ```
-pipeantenna ~/go/src/github.com/ashmeet28/pipeantenna/web_pages/index.html /mnt/t/pipeantenna_https_crt /mnt/t/pipeantenna_https_key /mnt/t/pipeantenna_auth_key_file
+pipeantenna ~/go/src/github.com/ashmeet28/pipeantenna/web_pages/index.html /mnt/t/pipeantenna_https_crt /mnt/t/pipeantenna_https_key /mnt/t/pipeantenna_auth_key_file 8080
 ```
 
 ```

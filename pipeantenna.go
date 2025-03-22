@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 5 {
+	if len(os.Args) != 6 {
 		os.Exit(1)
 	}
 
@@ -88,6 +88,7 @@ func main() {
 
 	certFilePath := os.Args[2]
 	keyFilePath := os.Args[3]
+	httpPortToListenOn := os.Args[5]
 
-	http.ListenAndServeTLS(":8080", certFilePath, keyFilePath, nil)
+	http.ListenAndServeTLS(":"+httpPortToListenOn, certFilePath, keyFilePath, nil)
 }
