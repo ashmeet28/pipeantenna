@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"sync"
@@ -12,26 +13,26 @@ import (
 
 func main() {
 	if len(os.Args) != 6 {
-		os.Exit(1)
+		log.Fatal("invalid arguments")
 	}
 
 	indexFilePath := os.Args[1]
 	indexFileData, err := os.ReadFile(indexFilePath)
 	if err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	authKeyBuf := make([]byte, 4)
 
 	if _, err := rand.Read(authKeyBuf); err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	authKey := hex.EncodeToString(authKeyBuf)
 
 	authKeyFilePath := os.Args[4]
 	if err := os.WriteFile(authKeyFilePath, append([]byte(authKey), 0x0a), 0600); err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	var l sync.Mutex
@@ -45,8 +46,10 @@ func main() {
 			w.Header().Set("Content-Disposition",
 				"attachment; filename=\""+time.Now().Format("20060102_150405")+"\"")
 			w.Header().Set("Content-Type", "application/octet-stream")
-			io.Copy(w, os.Stdin)
-
+			_, err := io.Copy(w, os.Stdin)
+			if err != nil {
+				log.Fatal(err)
+			}
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -60,14 +63,10 @@ func main() {
 		l.Lock()
 
 		if r.URL.Path == "/upload" {
-
 			_, err := io.Copy(os.Stdout, r.Body)
-			if err == nil {
-				w.WriteHeader(http.StatusOK)
-			} else {
-				w.WriteHeader(http.StatusInternalServerError)
+			if err != nil {
+				log.Fatal(err)
 			}
-
 		} else {
 			w.WriteHeader(http.StatusNotFound)
 		}
